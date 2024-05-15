@@ -71,5 +71,101 @@ iterateStream.parallel().forEach(System.out::println);
 List.of("a", "b", "c").parallelStream().forEach(System.out::println);
 ```
 ### 2. 中间操作(Intermediate Operations)
+在流中筛选出满足条件的元素，可以调用filter方法
+```java
+List<Person> people = List.of(new Person("Alan", 44, "US"),
+                new Person("Bruce", 17, "US"),
+                new Person("Crane", 19, "UK"),
+                new Person("Dolly", 15, "CN"),
+                new Person("Ella", 31, "FR")
+                );
 
+people.stream().filter(person -> person.getAge() > 18).forEach(System.out::println);
+```
+若要筛选掉重复的元素可以调用distinct方法，若元素为自定义类时，需要确保重写了equals和hashCode方法
+```java
+List<Person> people = List.of(new Person("Alan", 44, "US"),
+                new Person("Bruce", 17, "US"),
+                new Person("Crane", 19, "UK"),
+                new Person("Dolly", 15, "CN"),
+                new Person("Dolly", 15, "CN"), //重复人员
+                new Person("Ella", 31, "FR"),
+                new Person("Ella", 31, "FR") //重复人员
+                );
+
+people.stream().distinct().forEach(System.out::println);
+```
+limit和skip方法分别用来限制元素个数和跳过前面的元素
+```java
+List<Person> people = List.of(new Person("Alan", 44, "US"),
+                new Person("Bruce", 17, "US"),
+                new Person("Crane", 19, "UK"),
+                new Person("Dolly", 15, "CN"),
+                new Person("Ella", 31, "FR")
+                );
+
+people.stream().limit(2).forEach(System.out::println);
+people.stream().skip(2).forEach(System.out::println);
+```
+map方法可以将当前类型的流映射为指定类型的流
+```java
+List<Person> people = List.of(new Person("Alan", 44, "US"),
+                new Person("Bruce", 17, "US"),
+                new Person("Crane", 19, "UK"),
+                new Person("Dolly", 15, "CN"),
+                new Person("Ella", 31, "FR")
+                );
+
+Stream<String> names = people.stream().map(Person::getName);
+names.forEach(System.out::println);
+```
+flatMap可以将流中每一个元素都转换成另一个流，然后再将那些流合并成一个新的流， 通常用于处理嵌套结构的数据，例如流中的元素是集合，我们可以使用 flatMap 将所有集合中的元素平铺到一个新的流中。
+```java
+List<List<Person>> peopleGroup = List.of(List.of(new Person("Alan", 44, "US"),
+                new Person("Bruce", 17, "US")),
+                List.of(new Person("Crane", 19, "UK"),
+                        new Person("Dolly", 15, "CN")),
+                List.of(new Person("Ella", 31, "FR"))
+                );
+
+Stream<List<Person>> peopleGroupStream = peopleGroup.stream();
+Stream<Person> personStream = peopleGroupStream.flatMap(Collection::stream);
+personStream.forEach(System.out::println);
+```
+也可以用mapToInt, mapToDouble等方法将流转换为数值流
+```java
+List<Person> people = List.of(new Person("Alan", 44, "US"),
+                new Person("Bruce", 17, "US"),
+                new Person("Crane", 19, "UK"),
+                new Person("Dolly", 15, "CN"),
+                new Person("Ella", 31, "FR")
+        );
+
+people.stream().mapToInt(Person::getAge).forEach(System.out::println);
+```
+流的排序，调用sorted方法，和sort方法类似，如果实现了Comparable接口，则默认用compareTo方法进行排序，也可以直接实现Comparator
+```java
+Stream.of("banana", "apple", "watermelon", "cherry").
+        sorted().forEach(System.out::println);
+
+Stream.of("banana", "apple", "watermelon", "cherry").
+        sorted(Comparator.comparingInt(String::length)).forEach(System.out::println);
+```
+以下代码为上述方法的综合使用
+```java
+List<List<Person>> peopleGroup = List.of(
+                List.of(new Person("Alan", 44, "US"),
+                        new Person("Bruce", 17, "US")),
+                List.of(new Person("Crane", 19, "UK"),
+                        new Person("Dolly", 15, "CN")),
+                List.of(new Person("Ella", 31, "FR"))
+        );
+
+peopleGroup.stream()
+        .flatMap(Collection::stream)
+        .filter(person -> person.getAge() > 18)
+        .sorted(Comparator.comparingInt(Person::getAge))
+        .map(Person::getName)
+        .forEach(System.out::println);
+```
 ### 3. 终端操作(Terminal Operations)

@@ -220,7 +220,7 @@ Set<String> set = stream.collect(Collectors.toSet()); // 将流中的元素收�
 在之前的代码中已经多次使用`for-each`方法，此处不再赘述
 
 #### 收集器
-在上面介绍的collect方法中，将`Collector`当作参数，常见的`Collector`有`Collectors.toList`, `Collectors.toSet`
-也有分区和分组，如`Collectors.groupingBy`, `Collectors.partitioningBy`
-也可以用`Collector.of`自定义`Collector`
+在上面介绍的collect方法中，将`Collector`当作参数，常见的`Collector`有`Collectors.toList`, `Collectors.toSet` 
+也有分区和分组，如`Collectors.groupingBy`, `Collectors.partitioningBy` 
+也可以用`Collector.of`自定义`Collector` 
 具体相关用法可参考[Main.java](https://github.com/divine1022/StreamDemo/blob/master/src/Main.java)

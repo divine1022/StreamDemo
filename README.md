@@ -222,4 +222,4 @@ Set<String> set = stream.collect(Collectors.toSet()); // 将流中的元素收�
 #### 收集器
 在上面介绍的collect方法中，将`Collector`当作参数，常见的`Collector`有`Collectors.toList`, `Collectors.toSet`
 也有分区和分组，如`Collectors.groupingBy`, `Collectors.partitioningBy`
-[Main.java](https://github.com/divine1022/StreamDemo/blob/master/src/Main.java)
+具体相关用法可参考[Main.java](https://github.com/divine1022/StreamDemo/blob/master/src/Main.java)
